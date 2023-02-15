@@ -5,6 +5,7 @@ let isFirstLineEmpty = true
 let isSecondLineEmpty = true
 let gTextLines = 0
 let gCurrLine
+let gIsItalic = false
 
 function init() {
     gElCanvas = document.querySelector('.canvas-container')
@@ -16,8 +17,7 @@ function init() {
 function renderPhotos() {
     let elPhotos = document.querySelector('.images')
     let imgs = getImgs()
-    let strHTMLs = imgs.map(img => `<section class="img-option flex"><img src="${img.url}"></img>
-    <button onclick="onImgInputFromLiberty(${img.id})">Choose photo</button></section>`)
+    let strHTMLs = imgs.map(img => `<section class="img-option flex" onclick="onImgInputFromLiberty(${img.id})"><img src="${img.url}"></img></section>`)
     elPhotos.innerHTML = strHTMLs.join('')
 }
 
@@ -46,10 +46,13 @@ function closePhotoLiberty() {
 }
 
 function onImgInputFromLiberty(imgId) {
+    gMeme.selectedImgId = imgId
+    let currImg = getImgById(imgId)
     const img = new Image()
-    img.src = getImgById(imgId).url
+    img.src = currImg.url
     closePhotoLiberty()
     renderImg(img)
+    gTextLines = 0
 }
 
 function onImgInputFromUser(ev) {
@@ -65,15 +68,33 @@ function loadImageFromInput(ev, onImageReady) {
     }
     reader.readAsDataURL(ev.target.files[0])
     document.querySelector('.upload-img').style.display = 'none'
+    gTextLines = 0
 }
 
 function renderImg(img) {
     gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 }
 
+function onCloseUploadModal() {
+    document.querySelector('.upload-img').style.display = 'none'
+}
+
+function italicFontStyle() {
+    if (!gIsItalic) {
+        gIsItalic = true
+        document.querySelector('.italic').style.backgroundColor = 'black'
+        document.querySelector('.italic').style.color = 'white'
+    } else {
+        gIsItalic = false
+        document.querySelector('.italic').style.backgroundColor = 'white'
+        document.querySelector('.italic').style.color = 'black'
+    }
+}
+
 function addText(ev) {
     ev.preventDefault()
     if (gTextLines === 3) return
+    let specialStyle = gIsItalic ? 'italic' : ''
     if (isFirstLineEmpty) {
         gCurrLine = gElCanvas.height * 0.1
         isFirstLineEmpty = false
@@ -81,10 +102,21 @@ function addText(ev) {
         gCurrLine = gElCanvas.height * 0.9
         isSecondLineEmpty = false
     } else gCurrLine = gElCanvas.height * 0.5
-    gCtx.font = `${gCtx.lineWidth * 1.5}px ${gFont}`
+    gCtx.font = `${specialStyle} ${gCtx.lineWidth * 1.5}px ${gFont}`
     let elInput = document.querySelector('input[name=add-text]').value
     gCtx.fillText(elInput, gElCanvas.width * 0.5, gCurrLine)
+    // gMeme.selectedLineIdx = 
+    gMeme.lines.push([
+        {
+            txt: elInput,
+            size: gCtx.lineWidth * 1.5,
+            font: gFont,
+            align: 'left',
+            color: gCtx.fillStyle,
+        }
+    ])
     gTextLines++
+    console.log(gMeme)
 }
 
 function cleanCanvas() {

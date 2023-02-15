@@ -1,3 +1,13 @@
 .main-header {
     background-color: black;
+    color: #f3ebeb;
+}
+
+.links {
+    margin-inline-end: 10px;
+    justify-self: center;
+}
+
+.links a {
+    color: #f3ebeb;
 }

@@ -1,15 +1,33 @@
 .Toolbar {
     justify-self: center;
     width: 100%;
+    color: white;
 }
 
 .upload-img {
     display: none;
-    /* background-color: rgb(129, 96, 96); */
-    /* width: 350px; */
-    /* height: 350px; */
     position: absolute;
     top: 25%;
-    left: 50%;
+    left: 30%;
     translate: -50% -50%;
+}
+
+.x {
+    position: absolute;
+    left: -2em;
+    top: 0.2em;
+}
+
+.save a {
+    color: black;
+}
+
+.size {
+    background-color: aliceblue;
+    color: black;
+}
+
+.italic {
+    background-color: white;
+    color: black;
 }

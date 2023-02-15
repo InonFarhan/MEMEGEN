@@ -3,10 +3,6 @@
     justify-items: center;
 }
 
-img {
-    width: 100%;
-}
-
 .img-option {
     flex-direction: column;
 }

@@ -10,15 +10,18 @@
 </head>
 
 <body class="main-container grid" onload="init()">
-    <header class="main-header flex">
-        <h1 class="logo"></h1>
-        <li class="links">
-            <a href="#">Memes</a>
-            <a href=""></a>
-            <a href=""></a>
+    <header class="main-header grid">
+        <h1 class="logo">MEMEGEN</h1>
+        <li class="links flex">
+            <a href="#">My Memes</a>
         </li>
     </header>
-    <canvas class="canvas-container" height="450" width="450"></canvas>
+    <canvas class="canvas-container" height="450" width="450">
+    </canvas>
+    <div class="upload-img">
+        <input type="file" class="file-input btn" name="image" onchange="onImgInputFromUser(event)" />
+        <button class="x" onclick="onCloseUploadModal()">x</button>
+    </div>
     <div class="images grid"></div>
     <section class="Toolbar">
         <div class="flex">
@@ -29,6 +32,7 @@
                 (<span class="size-number">8</span>)
                 <button onclick="setSize('+')">A+</button>
             </div>
+            <div class="italic" onclick="italicFontStyle()">Italic</div>
             <select onchange="setFont(value)" name="font">
                 <option>Font</option>
                 <option value="Ariel">Ariel</option>
@@ -44,7 +48,7 @@
             <button>Add</button>
         </form>
         <div>
-            <select onchange="chooseImg(value)" name="choose-img">
+            <select class="flex" onchange="chooseImg(value)" name="choose-img">
                 <option>Choose an img from:</option>
                 <option value="liberty">Liberty</option>
                 <option value="upload">Upload</option>
@@ -61,15 +65,12 @@
             </div> -->
                 <div class="flex">
                     <button class="save"><a href="#" onclick="save(this)" download="">Download</a></button>
-                    <button class="btn" onclick="onUploadImg()">Share</button>
+                    <button class="share" onclick="onUploadImg()">Share</button>
                 </div>
             </div>
     </section>
-    <div class="upload-img">
-        <input type="file" class="file-input btn" name="image" onchange="onImgInputFromUser(event)" />
-    </div>
     <footer class="main-footer">
-        <h1 class="logo"></h1>
+        <h1 class="logo">MEMEGEN</h1>
         <small>© 2023 MeneGen.com - All Rights Reserved</small>
     </footer>
 
