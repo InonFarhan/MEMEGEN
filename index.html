@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>MEMEGEN</title>
+</head>
+
+<body class="main-container grid" onload="init()">
+    <header class="main-header flex">
+        <h1 class="logo"></h1>
+        <li class="links">
+            <a href="#">Memes</a>
+            <a href=""></a>
+            <a href=""></a>
+        </li>
+    </header>
+    <canvas class="canvas-container" height="450" width="450"></canvas>
+    <div class="images grid"></div>
+    <section class="Toolbar">
+        <div class="flex">
+            <input onchange="setColor(this.value)" type="color">
+            <!-- <input onchange="setFont(this.value)" type="Font"> -->
+            <div class="size">
+                <button onclick="setSize('-')">A-</button>
+                (<span class="size-number">8</span>)
+                <button onclick="setSize('+')">A+</button>
+            </div>
+            <select onchange="setFont(value)" name="font">
+                <option>Font</option>
+                <option value="Ariel">Ariel</option>
+                <option value="Courier">Courier</option>
+                <option value="Lucida Sans">Lucida</option>
+                <option value="Times New Roman">Roman</option>
+                <option value="Trebuchet MS">Trebuchet</option>
+            </select>
+            <button onclick="cleanCanvas()" class="delete">Clean board</button>
+        </div>
+        <form class="add-text flex" onsubmit="addText(event)">
+            <input type="text" name="add-text">
+            <button>Add</button>
+        </form>
+        <div>
+            <select onchange="chooseImg(value)" name="choose-img">
+                <option>Choose an img from:</option>
+                <option value="liberty">Liberty</option>
+                <option value="upload">Upload</option>
+            </select>
+            <div class="flex">
+                <!-- <button onclick="openPhotoLiberty()">Choose photo</button> -->
+                <!-- </div> -->
+                <!-- <div class="flex">
+                <button class="">&</button>
+                <button class="">&</button>
+                <button class="">&</button>
+                <button class="">&</button>
+                <button class="">&</button>
+            </div> -->
+                <div class="flex">
+                    <button class="save"><a href="#" onclick="save(this)" download="">Download</a></button>
+                    <button class="btn" onclick="onUploadImg()">Share</button>
+                </div>
+            </div>
+    </section>
+    <div class="upload-img">
+        <input type="file" class="file-input btn" name="image" onchange="onImgInputFromUser(event)" />
+    </div>
+    <footer class="main-footer">
+        <h1 class="logo"></h1>
+        <small>© 2023 MeneGen.com - All Rights Reserved</small>
+    </footer>
+
+    <!-- <script src="js/services/i18n-service.js"></script> -->
+    <script src="js/services/queryParams.js"></script>
+    <script src="js/services/storage.js"></script>
+    <script src="js/services/memes-service.js"></script>
+    <script src="js/services/canvas-service.js"></script>
+    <script src="js/controller.js"></script>
+
+</body>
+
+</html>
