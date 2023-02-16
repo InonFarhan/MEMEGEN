@@ -13,7 +13,7 @@
     <header class="main-header grid">
         <h1 class="logo">MEMEGEN</h1>
         <li class="links flex">
-            <a href="#">My Memes</a>
+            <a onclick="onOpenMemesLiberty()" href="#">My Memes</a>
         </li>
     </header>
     <canvas class="canvas-container" height="450" width="450">
@@ -29,7 +29,7 @@
             <!-- <input onchange="setFont(this.value)" type="Font"> -->
             <div class="size">
                 <button onclick="setSize('-')">A-</button>
-                (<span class="size-number">8</span>)
+                (<span class="size-number">22</span>)
                 <button onclick="setSize('+')">A+</button>
             </div>
             <div class="italic" onclick="italicFontStyle()">Italic</div>
@@ -49,7 +49,7 @@
         </form>
         <div>
             <select class="flex" onchange="chooseImg(value)" name="choose-img">
-                <option>Choose an img from:</option>
+                <option>Choose img</option>
                 <option value="liberty">Liberty</option>
                 <option value="upload">Upload</option>
             </select>
@@ -64,8 +64,9 @@
                 <button class="">&</button>
             </div> -->
                 <div class="flex">
-                    <button class="save"><a href="#" onclick="save(this)" download="">Download</a></button>
-                    <button class="share" onclick="onUploadImg()">Share</button>
+                    <button class="download"><a href="#" onclick="save(this)" download="">Download</a></button>
+                    <button class="save" onclick="onSaveImg()">Save</button>
+                    <button class="share" onclick="onSaveImg()">Share</button>
                 </div>
             </div>
     </section>

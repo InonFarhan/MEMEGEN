@@ -10,19 +10,32 @@ let gIsItalic = false
 function init() {
     gElCanvas = document.querySelector('.canvas-container')
     gCtx = gElCanvas.getContext('2d')
-    gCtx.lineWidth = 8
-    renderPhotos()
+    gCtx.lineWidth = 22
+    // renderPhotos()
 }
 
-function renderPhotos() {
+function renderPhotos(imgs = getImgs()) {
     let elPhotos = document.querySelector('.images')
-    let imgs = getImgs()
+    // let imgs = getImgs()
     let strHTMLs = imgs.map(img => `<section class="img-option flex" onclick="onImgInputFromLiberty(${img.id})"><img src="${img.url}"></img></section>`)
     elPhotos.innerHTML = strHTMLs.join('')
 }
 
-function openPhotoLiberty() {
-    let elPhotos = document.querySelector('.images')
+function renderMemes() {
+
+}
+
+function onOpenMemesLiberty() {
+    console.log(liberty)
+    // renderPhotos(getImagesLiberty())
+    // renderMemes()
+    // onOpenPhotoLiberty('images')
+}
+
+function onOpenPhotoLiberty(liberty = getImagesLiberty()) {
+    if (!liberty.length) return
+    renderPhotos()
+    let elPhotos = document.querySelector(`.${liberty}`)
     let elCanvas = document.querySelector('.canvas-container')
     let elBAr = document.querySelector('.Toolbar')
     elPhotos.style.display = 'grid'
@@ -32,7 +45,7 @@ function openPhotoLiberty() {
 
 function chooseImg(value) {
     document.querySelector('.upload-img').style.display = 'none'
-    if (value === 'liberty') openPhotoLiberty()
+    if (value === 'liberty') onOpenPhotoLiberty('images')
     else if (value === 'upload') document.querySelector('.upload-img').style.display = 'block'
 }
 
@@ -79,6 +92,16 @@ function onCloseUploadModal() {
     document.querySelector('.upload-img').style.display = 'none'
 }
 
+function onSaveImg() {
+    let liberty = getImagesLiberty()
+    let currMemes = JSON.parse(JSON.stringify(gMeme))
+    liberty.push(currMemes)
+    gTextLines = 0
+    isFirstLineEmpty = true
+    isSecondLineEmpty = true
+    gMeme.lines = []
+}
+
 function italicFontStyle() {
     if (!gIsItalic) {
         gIsItalic = true
@@ -93,7 +116,9 @@ function italicFontStyle() {
 
 function addText(ev) {
     ev.preventDefault()
+    let elInput = document.querySelector('input[name=add-text]').value
     if (gTextLines === 3) return
+    if (!elInput) return
     let specialStyle = gIsItalic ? 'italic' : ''
     if (isFirstLineEmpty) {
         gCurrLine = gElCanvas.height * 0.1
@@ -103,24 +128,23 @@ function addText(ev) {
         isSecondLineEmpty = false
     } else gCurrLine = gElCanvas.height * 0.5
     gCtx.font = `${specialStyle} ${gCtx.lineWidth * 1.5}px ${gFont}`
-    let elInput = document.querySelector('input[name=add-text]').value
+    gCtx.textAlign = 'center'
     gCtx.fillText(elInput, gElCanvas.width * 0.5, gCurrLine)
-    // gMeme.selectedLineIdx = 
     gMeme.lines.push([
         {
             txt: elInput,
             size: gCtx.lineWidth * 1.5,
             font: gFont,
-            align: 'left',
+            specialStyle: specialStyle === '' ? null : specialStyle,
+            align: gCtx.textAlign,
             color: gCtx.fillStyle,
         }
     ])
     gTextLines++
-    console.log(gMeme)
 }
 
 function cleanCanvas() {
-    gCtx.fillStyle = 'rgba(6, 44, 82, 1)'
+    gCtx.fillStyle = '#aa91b4'
     gCtx.fillRect(0, 0, gElCanvas.width, gElCanvas.height)
 }
 

@@ -20,13 +20,19 @@ let gImgs = [
     { id: 18, url: 'img/18.jpg', keywords: ['funny', 'Toy Story'] },
 ]
 let gMeme = {
-    selectedImgId: 5,
-    selectedLineIdx: 0,
+    selectedImgId: null,
+    selectedLineIdx: null,
     lines: []
 }
 
+let gImagesLiberty = []
+
 function getImgs() {
     return gImgs
+}
+
+function getImagesLiberty() {
+    return gImagesLiberty
 }
 
 function getImgById(imgId) {
