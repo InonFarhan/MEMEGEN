@@ -1,71 +1,102 @@
+'use strict'
+
 let gElCanvas
 let gCtx
 let gFont = 'Ariel'
 let isFirstLineEmpty = true
 let isSecondLineEmpty = true
 let gTextLines = 0
-let gCurrLine
+let gCurrLineMulti = 1
 let gIsItalic = false
 
 function init() {
     gElCanvas = document.querySelector('.canvas-container')
     gCtx = gElCanvas.getContext('2d')
     gCtx.lineWidth = 22
-    // renderPhotos()
 }
 
-function renderPhotos(imgs = getImgs()) {
+function renderPhotos(imgs) {
     let elPhotos = document.querySelector('.images')
-    // let imgs = getImgs()
     let strHTMLs = imgs.map(img => `<section class="img-option flex" onclick="onImgInputFromLiberty(${img.id})"><img src="${img.url}"></img></section>`)
     elPhotos.innerHTML = strHTMLs.join('')
 }
 
-function renderMemes() {
+// function renderMemes(memes) {
+//     var numbersByWords = ['one', 'two', 'three', 'four']
+//     let elMemesContainer = document.querySelector('.memes-container')
+//     let strHTMLs = memes.map(mem => `<canvas class="memes-canvas ${numbersByWords[mem.selectedImgId - 1]}"></canvas>`)
+//     elMemesContainer.innerHTML = strHTMLs.join('')
+//     console.log(strHTMLs.join(''));
 
-}
+//     memes.forEach(mem => {
+//         let currImg = getImgById(mem.selectedImgId)
+//         const img = new Image()
+//         img.src = currImg.url
+//         let elCurrCanvas = document.querySelector(`.memes-canvas ${numbersByWords[mem.selectedImgId - 1]}`)
+//         console.log(elCurrCanvas)
+//         let ctx = elCurrCanvas.getContext('2d')
+//         ctx.drawImage(img, 0, 0, elCurrCanvas.width, elCurrCanvas.height)
+//     })
+//     elMemesContainer.style.display = 'grid'
+// }
 
 function onOpenMemesLiberty() {
-    console.log(liberty)
-    // renderPhotos(getImagesLiberty())
-    // renderMemes()
-    // onOpenPhotoLiberty('images')
+    let liberty = getMemesLiberty()
+    closeCanvas()
+    closeTools()
+    onOpenPhotoLiberty(liberty)
 }
 
-function onOpenPhotoLiberty(liberty = getImagesLiberty()) {
+function onOpenPhotoLiberty(liberty = getImgs()) {
     if (!liberty.length) return
-    renderPhotos()
-    let elPhotos = document.querySelector(`.${liberty}`)
-    let elCanvas = document.querySelector('.canvas-container')
-    let elBAr = document.querySelector('.Toolbar')
+    renderPhotos(liberty)
+    closeCanvas()
+    closeTools()
+    let elPhotos = document.querySelector(`.images`)
     elPhotos.style.display = 'grid'
+}
+
+function closeCanvas() {
+    let elCanvas = document.querySelector('.canvas-container')
     elCanvas.style.display = 'none'
+}
+
+function closeTools() {
+    let elBAr = document.querySelector('.Toolbar')
     elBAr.style.display = 'none'
+}
+
+function openCanvas() {
+    let elCanvas = document.querySelector('.canvas-container')
+    elCanvas.style.display = 'block'
+}
+
+function openTools() {
+    let elBAr = document.querySelector('.Toolbar')
+    elBAr.style.display = 'block'
 }
 
 function chooseImg(value) {
     document.querySelector('.upload-img').style.display = 'none'
-    if (value === 'liberty') onOpenPhotoLiberty('images')
+    if (value === 'liberty') onOpenPhotoLiberty()
     else if (value === 'upload') document.querySelector('.upload-img').style.display = 'block'
 }
 
 function closePhotoLiberty() {
     let elPhotos = document.querySelector('.images')
-    let elCanvas = document.querySelector('.canvas-container')
-    let elBAr = document.querySelector('.Toolbar')
     elPhotos.style.display = 'none'
-    elCanvas.style.display = 'block'
-    elBAr.style.display = 'block'
+    openCanvas()
+    openTools()
 }
 
 function onImgInputFromLiberty(imgId) {
+    reset()
     gMeme.selectedImgId = imgId
     let currImg = getImgById(imgId)
     const img = new Image()
     img.src = currImg.url
     closePhotoLiberty()
     renderImg(img)
-    gTextLines = 0
 }
 
 function onImgInputFromUser(ev) {
@@ -93,13 +124,10 @@ function onCloseUploadModal() {
 }
 
 function onSaveImg() {
-    let liberty = getImagesLiberty()
+    const data = gElCanvas.toDataURL()
     let currMemes = JSON.parse(JSON.stringify(gMeme))
-    liberty.push(currMemes)
-    gTextLines = 0
-    isFirstLineEmpty = true
-    isSecondLineEmpty = true
-    gMeme.lines = []
+    currMemes.url = data
+    saveImage(currMemes)
 }
 
 function italicFontStyle() {
@@ -114,23 +142,22 @@ function italicFontStyle() {
     }
 }
 
+function moveText(ev) {
+    // let x = ev.offsetX
+    // let y = ev.offsetY
+    // gCtx.clearRect(0, 0, 999, 999)
+    // gCtx.fillText(gMeme.lines[0].txt, x, y);
+}
+
 function addText(ev) {
     ev.preventDefault()
     let elInput = document.querySelector('input[name=add-text]').value
-    if (gTextLines === 3) return
     if (!elInput) return
     let specialStyle = gIsItalic ? 'italic' : ''
-    if (isFirstLineEmpty) {
-        gCurrLine = gElCanvas.height * 0.1
-        isFirstLineEmpty = false
-    } else if (isSecondLineEmpty) {
-        gCurrLine = gElCanvas.height * 0.9
-        isSecondLineEmpty = false
-    } else gCurrLine = gElCanvas.height * 0.5
     gCtx.font = `${specialStyle} ${gCtx.lineWidth * 1.5}px ${gFont}`
     gCtx.textAlign = 'center'
-    gCtx.fillText(elInput, gElCanvas.width * 0.5, gCurrLine)
-    gMeme.lines.push([
+    gCtx.fillText(elInput, gElCanvas.width / 2, gElCanvas.height * 0.1 * gCurrLineMulti)
+    gMeme.lines.push(
         {
             txt: elInput,
             size: gCtx.lineWidth * 1.5,
@@ -139,13 +166,27 @@ function addText(ev) {
             align: gCtx.textAlign,
             color: gCtx.fillStyle,
         }
-    ])
-    gTextLines++
+    )
+    gCurrLineMulti++
 }
 
-function cleanCanvas() {
+function clearCanvas() {
+    let currColor = gCtx.fillStyle
     gCtx.fillStyle = '#aa91b4'
     gCtx.fillRect(0, 0, gElCanvas.width, gElCanvas.height)
+    gCtx.fillStyle = currColor
+    reset()
+}
+
+function reset() {
+    gTextLines = 0
+    isFirstLineEmpty = true
+    isSecondLineEmpty = true
+    gMeme = {
+        selectedImgId: null,
+        selectedLineIdx: null,
+        lines: []
+    }
 }
 
 function setColor(color) {

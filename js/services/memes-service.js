@@ -1,3 +1,6 @@
+'use strict'
+
+const STORAGE_KEY = 'myMemes'
 let gKeywordSearchCountMap = { 'funny': 12, 'cat': 16, 'baby': 2 }
 let gImgs = [
     { id: 1, url: 'img/1.jpg', keywords: ['funny', 'trump'] },
@@ -25,16 +28,21 @@ let gMeme = {
     lines: []
 }
 
-let gImagesLiberty = []
+let gMemesLiberty = []
 
 function getImgs() {
     return gImgs
 }
 
-function getImagesLiberty() {
-    return gImagesLiberty
+function getMemesLiberty() {
+    return loadFromStorage(STORAGE_KEY)
 }
 
 function getImgById(imgId) {
     return gImgs.find(img => img.id === imgId)
+}
+
+function saveImage(img) {
+    gMemesLiberty.push(img)
+    saveToStorage(STORAGE_KEY, gMemesLiberty)
 }

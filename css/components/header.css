@@ -1,13 +1,10 @@
-.main-header {
-    background-color: black;
-    color: #f3ebeb;
-}
-
 .links {
     margin-inline-end: 10px;
-    justify-self: center;
 }
 
-.links a {
+.header-button {
+    background: none;
     color: #f3ebeb;
+    border: none;
+    font-size: 1em;
 }

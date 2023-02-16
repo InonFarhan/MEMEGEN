@@ -1,21 +1,15 @@
 * {
     box-sizing: border-box;
     text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 html {
     line-height: 1.5;
 }
 
-li {
-    list-style: none;
-}
-
-a {
-    text-decoration: none;
-}
-
 body {
+    color: #f3ebeb;
     background: rgb(74, 34, 82);
     background: linear-gradient(90deg, rgba(74, 34, 82, 1) 18%, rgba(6, 44, 82, 1) 86%);
 }
