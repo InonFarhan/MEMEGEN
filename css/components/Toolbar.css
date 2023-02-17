@@ -20,14 +20,34 @@
 
 .download a {
     color: black;
+    text-decoration: none;
 }
 
 .size {
-    background-color: aliceblue;
-    color: black;
+    color: white;
 }
 
 .italic {
-    background-color: white;
-    color: black;
+    color: gray;
+}
+
+.Toolbar button,
+select {
+    border-radius: 10px;
+}
+
+.last button:hover,
+.delete:hover {
+    animation: grow 500ms alternate infinite;
+}
+
+.add-text button:hover,
+.size button:hover {
+    color: rgb(82, 122, 122);
+}
+
+@keyframes grow {
+    100% {
+        scale: 1.3;
+    }
 }

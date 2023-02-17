@@ -133,30 +133,43 @@ function onSaveImg() {
 function italicFontStyle() {
     if (!gIsItalic) {
         gIsItalic = true
-        document.querySelector('.italic').style.backgroundColor = 'black'
         document.querySelector('.italic').style.color = 'white'
     } else {
         gIsItalic = false
-        document.querySelector('.italic').style.backgroundColor = 'white'
-        document.querySelector('.italic').style.color = 'black'
+        document.querySelector('.italic').style.color = 'gray'
     }
 }
 
-function moveText(ev) {
-    // let x = ev.offsetX
-    // let y = ev.offsetY
-    // gCtx.clearRect(0, 0, 999, 999)
-    // gCtx.fillText(gMeme.lines[0].txt, x, y);
+function checkIfText(ev) {
+    gMeme.lines.find((line, idx) => {
+        gMeme.selectedLineIdx = idx
+        let currPosX = ev.offsetX - (line.textWidth / 2)
+        let currPosY = line.cell.y + (line.size)
+        return currPosX >= line.cell.x && currPosX < line.cell.x + line.textWidth && ev.offsetY >= line.cell.y && ev.offsetY < currPosY
+    })
+}
+
+function moveText(value) {
+    let currLine = gMeme.selectedLineIdx
+    gMeme.lines[currLine].cell.y += +value
+    renderCanvas(gMeme)
 }
 
 function addText(ev) {
     ev.preventDefault()
     let elInput = document.querySelector('input[name=add-text]').value
     if (!elInput) return
+
+    let currTextSize = gCtx.lineWidth * 1.5
     let specialStyle = gIsItalic ? 'italic' : ''
-    gCtx.font = `${specialStyle} ${gCtx.lineWidth * 1.5}px ${gFont}`
+    let cell = { x: gElCanvas.width / 2, y: gElCanvas.height * 0.2 * gCurrLineMulti }
+
+    gCtx.font = `${specialStyle} ${currTextSize}px ${gFont}`
     gCtx.textAlign = 'center'
-    gCtx.fillText(elInput, gElCanvas.width / 2, gElCanvas.height * 0.1 * gCurrLineMulti)
+
+    gCtx.fillText(elInput, cell.x, cell.y)
+    gCtx.strokeStyle = 'black'
+
     gMeme.lines.push(
         {
             txt: elInput,
@@ -165,9 +178,23 @@ function addText(ev) {
             specialStyle: specialStyle === '' ? null : specialStyle,
             align: gCtx.textAlign,
             color: gCtx.fillStyle,
+            cell: cell,
+            textWidth: gCtx.measureText(elInput).width
         }
     )
     gCurrLineMulti++
+    console.log(cell.y)
+}
+
+function renderCanvas(mem) {
+    let currImg = mem
+    onImgInputFromLiberty(currImg.selectedImgId)
+    currImg.lines.forEach(line => {
+        gCtx.fillText(line.txt, line.cell.x, line.cell.y)
+        gMeme.lines.push(line)
+    })
+    console.log('currImg', currImg)
+    console.log('gMeme', gMeme)
 }
 
 function clearCanvas() {

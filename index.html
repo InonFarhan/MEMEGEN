@@ -17,8 +17,7 @@
             <button class="header-button" onclick="chooseImg('liberty')">Liberty</button>
         </div>
     </header>
-    <canvas class="canvas-container" onclick="moveText(event)" height="450" width="450">
-    </canvas>
+    <canvas class="canvas-container" onclick="checkIfText(event)" height="450" width="450"></canvas>
     <div class="upload-img">
         <input type="file" class="file-input btn" name="image" onchange="onImgInputFromUser(event)" />
         <button class="x" onclick="onCloseUploadModal()">x</button>
@@ -26,12 +25,12 @@
     <div class="images grid"></div>
     <section class="Toolbar grid">
         <div class="first flex">
-            <input onchange="setColor(this.value)" type="color">
             <div class="size">
-                <button onclick="setSize('-')">A-</button>
+                <button class="fa-brands fa-atlassian" onclick="setSize('-')">-</button>
                 (<span class="size-number">22</span>)
-                <button onclick="setSize('+')">A+</button>
+                <button class="fa-brands fa-atlassian" onclick="setSize('+')">+</button>
             </div>
+            <div class="italic fa-solid fa-italic" onclick="italicFontStyle()"></div>
             <select class="font" onchange="setFont(value)" name="font">
                 <option value="Ariel">Ariel</option>
                 <option value="Courier">Courier</option>
@@ -39,20 +38,22 @@
                 <option value="Times New Roman">Roman</option>
                 <option value="Trebuchet MS">Trebuchet</option>
             </select>
-            <div class="italic" onclick="italicFontStyle()">Italic</div>
+            <input onchange="setColor(this.value)" type="color">
         </div>
         <div class="sec flex">
             <form class="add-text flex" onsubmit="addText(event)">
                 <input type="text" name="add-text">
                 <button>Add text</button>
             </form>
-            <button onclick="clearCanvas()" class="delete">Clear board</button>
+            <button class="delete fa-solid fa-trash-can" onclick="clearCanvas()"></button>
+            <button class="fa-solid fa-arrow-up-a-z" onclick="moveText('-100')"></button>
+            <button class="fa-solid fa-arrow-down-a-z" onclick="moveText('+100')"></button>
         </div>
         <div class="last flex">
-            <button class="download"><a href="#" onclick="save(this)" download="">Download</a></button>
-            <button class="save"><a href="#" onclick="onSaveImg()">Save</a></button>
-            <button class="share" onclick="onSaveImg()">Share</button>
-            <button onclick="chooseImg('upload')"> Upload</button>
+            <button class="download fa-solid fa-download"><a href="#" onclick="save(this)" download=""></a></button>
+            <button class="fa-solid fa-floppy-disk save"><a href="#" onclick="onSaveImg()"></a></button>
+            <button class="share fa-solid fa-share-nodes" onclick="onSaveImg()"></button>
+            <button class="fa-solid fa-file-arrow-up" onclick="chooseImg('upload')"></button>
         </div>
     </section>
     <footer class="main-footer">
@@ -66,7 +67,7 @@
     <script src="js/services/memes-service.js"></script>
     <script src="js/services/canvas-service.js"></script>
     <script src="js/controller.js"></script>
-
+    <script src="https://kit.fontawesome.com/a794b6936d.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
