@@ -43,6 +43,7 @@ function getImgById(imgId) {
 }
 
 function saveImage(img) {
+    console.log(img);
     gMemesLiberty.push(img)
     saveToStorage(STORAGE_KEY, gMemesLiberty)
 }

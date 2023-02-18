@@ -6,7 +6,7 @@ let gFont = 'Ariel'
 let gIsItalic = false
 let gSize = 22
 let gChangeLineStep
-
+let gCurrUploadImg
 
 function init() {
     gElCanvas = document.querySelector('.canvas-container')
@@ -70,8 +70,12 @@ function closePhotoLiberty() {
 }
 
 function onImgInputFromLiberty(imgId) {
-    gMeme.selectedImgId = imgId
-    let currImg = getImgById(imgId)
+    let currImg
+    if (!imgId) currImg = '<img src="${gCurrUploadImg}"></img>'
+    else {
+        gMeme.selectedImgId = imgId
+        currImg = getImgById(imgId)
+    }
     const img = new Image()
     img.src = currImg.url
     closePhotoLiberty()
@@ -86,15 +90,17 @@ function loadImageFromInput(ev, onImageReady) {
     const reader = new FileReader()
     reader.onload = function (event) {
         let img = new Image()
+        gCurrUploadImg = img
         img.src = event.target.result
         img.onload = onImageReady.bind(null, img)
     }
     reader.readAsDataURL(ev.target.files[0])
+    gMeme.selectedImgId = getImgs().length
     document.querySelector('.upload-img').style.display = 'none'
-    gTextLines = 0
 }
 
 function renderImg(img) {
+    gCurrUploadImg = img
     gCtx.drawImage(img, 0, 0, gElCanvas.width, gElCanvas.height)
 }
 
@@ -170,8 +176,14 @@ function drawFrame(line) {
 function renderCanvas(mem) {
     clearCanvas(false)
     let currImg = mem.selectedImgId
-    if (currImg) onImgInputFromLiberty(currImg)
+    if (currImg > getImgs().length - 1) renderImg(gCurrUploadImg)
+    else if (currImg) onImgInputFromLiberty(currImg)
     mem.lines.forEach(line => {
+        // console.log(line);
+        gCtx.beginPath()
+        gCtx.textAlign = line.align
+        gCtx.fillStyle = line.color
+        gCtx.font = `${line.specialStyle} ${line.size}px ${line.font}`
         gCtx.fillText(line.txt, line.cell.x, line.cell.y)
     })
 }

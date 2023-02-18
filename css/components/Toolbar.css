@@ -18,7 +18,8 @@
     top: 0.2em;
 }
 
-.download {
+.download,
+.save {
     color: black;
 }
 

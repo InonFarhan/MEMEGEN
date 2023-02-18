@@ -17,7 +17,7 @@
             <button class="header-button" onclick="chooseImg('liberty')">Liberty</button>
         </div>
     </header>
-    <canvas class="canvas-container" onclick="checkIfText(event)" height="450" width="450"></canvas>
+    <canvas class="canvas-container" height="450" width="450"></canvas>
     <div class="upload-img">
         <input type="file" class="file-input btn" name="image" onchange="onImgInputFromUser(event)" />
         <button class="x" onclick="onCloseUploadModal()">x</button>
@@ -51,10 +51,11 @@
             <button class="fa-solid fa-arrows-up-down" onclick="changeLine()"></button>
         </div>
         <div class="last flex">
-            <button><a class="download fa-solid fa-download" href="#" onclick="save(this)" download=""></a></button>
-            <button class="fa-solid fa-floppy-disk save"><a href="#" onclick="onSaveImg()"></a></button>
-            <button class="share fa-solid fa-share-nodes" onclick="onSaveImg()"></button>
-            <button class="fa-solid fa-file-arrow-up" onclick="chooseImg('upload')"></button>
+            <button><a title="Download" class="download fa-solid fa-download" href="#" onclick="save(this)"
+                    download=""></a></button>
+            <button><a title="Save" class="fa-solid fa-floppy-disk save" href="#" onclick="onSaveImg()"></a></button>
+            <!-- <button title="Share" class="share fa-solid fa-share-nodes" onclick="onShareImg()"></button> -->
+            <button title="Upload" class="fa-solid fa-file-arrow-up" onclick="chooseImg('upload')"></button>
         </div>
     </section>
     <footer class="main-footer">
