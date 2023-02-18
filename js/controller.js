@@ -3,11 +3,10 @@
 let gElCanvas
 let gCtx
 let gFont = 'Ariel'
-let isFirstLineEmpty = true
-let isSecondLineEmpty = true
-let gTextLines = 0
-let gCurrLineMulti = 1
 let gIsItalic = false
+let gSize = 22
+let gStepValue
+
 
 function init() {
     gElCanvas = document.querySelector('.canvas-container')
@@ -20,25 +19,6 @@ function renderPhotos(imgs) {
     let strHTMLs = imgs.map(img => `<section class="img-option flex" onclick="onImgInputFromLiberty(${img.id})"><img src="${img.url}"></img></section>`)
     elPhotos.innerHTML = strHTMLs.join('')
 }
-
-// function renderMemes(memes) {
-//     var numbersByWords = ['one', 'two', 'three', 'four']
-//     let elMemesContainer = document.querySelector('.memes-container')
-//     let strHTMLs = memes.map(mem => `<canvas class="memes-canvas ${numbersByWords[mem.selectedImgId - 1]}"></canvas>`)
-//     elMemesContainer.innerHTML = strHTMLs.join('')
-//     console.log(strHTMLs.join(''));
-
-//     memes.forEach(mem => {
-//         let currImg = getImgById(mem.selectedImgId)
-//         const img = new Image()
-//         img.src = currImg.url
-//         let elCurrCanvas = document.querySelector(`.memes-canvas ${numbersByWords[mem.selectedImgId - 1]}`)
-//         console.log(elCurrCanvas)
-//         let ctx = elCurrCanvas.getContext('2d')
-//         ctx.drawImage(img, 0, 0, elCurrCanvas.width, elCurrCanvas.height)
-//     })
-//     elMemesContainer.style.display = 'grid'
-// }
 
 function onOpenMemesLiberty() {
     let liberty = getMemesLiberty()
@@ -90,7 +70,6 @@ function closePhotoLiberty() {
 }
 
 function onImgInputFromLiberty(imgId) {
-    reset()
     gMeme.selectedImgId = imgId
     let currImg = getImgById(imgId)
     const img = new Image()
@@ -123,13 +102,6 @@ function onCloseUploadModal() {
     document.querySelector('.upload-img').style.display = 'none'
 }
 
-function onSaveImg() {
-    const data = gElCanvas.toDataURL()
-    let currMemes = JSON.parse(JSON.stringify(gMeme))
-    currMemes.url = data
-    saveImage(currMemes)
-}
-
 function italicFontStyle() {
     if (!gIsItalic) {
         gIsItalic = true
@@ -140,40 +112,42 @@ function italicFontStyle() {
     }
 }
 
-function checkIfText(ev) {
-    gMeme.lines.find((line, idx) => {
-        gMeme.selectedLineIdx = idx
-        let currPosX = ev.offsetX - (line.textWidth / 2)
-        let currPosY = line.cell.y + (line.size)
-        return currPosX >= line.cell.x && currPosX < line.cell.x + line.textWidth && ev.offsetY >= line.cell.y && ev.offsetY < currPosY
-    })
-}
-
 function moveText(value) {
-    let currLine = gMeme.selectedLineIdx
+    let currLine = gMeme.selectedLineIdx - 1
     gMeme.lines[currLine].cell.y += +value
     renderCanvas(gMeme)
+    changeLine(false)
+}
+
+function changeLine(isChange = true) {
+    if (gMeme.selectedLineIdx === 1) gStepValue = '+1'
+    if (gMeme.selectedLineIdx === gMeme.lines.length) gStepValue = '-1'
+    if (!isChange) gStepValue = '0'
+    gMeme.selectedLineIdx += +gStepValue
+    renderCanvas(gMeme)
+    drawFrame(gMeme.lines[gMeme.selectedLineIdx - 1])
 }
 
 function addText(ev) {
     ev.preventDefault()
     let elInput = document.querySelector('input[name=add-text]').value
-    if (!elInput) return
+    if (!elInput || gMeme.lines.length === 3) return
 
-    let currTextSize = gCtx.lineWidth * 1.5
+    let currTextSize = gSize * 1.5
     let specialStyle = gIsItalic ? 'italic' : ''
-    let cell = { x: gElCanvas.width / 2, y: gElCanvas.height * 0.2 * gCurrLineMulti }
+    let cell = {
+        x: gElCanvas.width / 2,
+        y: !gMeme.lines.length ? gElCanvas.height * 0.2 : gMeme.lines.length === 1 ? gElCanvas.height * 0.5 : gElCanvas.height * 0.8
+    }
 
     gCtx.font = `${specialStyle} ${currTextSize}px ${gFont}`
     gCtx.textAlign = 'center'
-
     gCtx.fillText(elInput, cell.x, cell.y)
-    gCtx.strokeStyle = 'black'
 
     gMeme.lines.push(
         {
             txt: elInput,
-            size: gCtx.lineWidth * 1.5,
+            size: currTextSize,
             font: gFont,
             specialStyle: specialStyle === '' ? null : specialStyle,
             align: gCtx.textAlign,
@@ -182,33 +156,35 @@ function addText(ev) {
             textWidth: gCtx.measureText(elInput).width
         }
     )
-    gCurrLineMulti++
-    console.log(cell.y)
+    renderCanvas(gMeme)
+    drawFrame(gMeme.lines[gMeme.selectedLineIdx])
+    gMeme.selectedLineIdx++
+}
+
+function drawFrame(line) {
+    gCtx.lineWidth = 3
+    gCtx.strokeStyle = 'red'
+    gCtx.strokeRect((line.cell.x - 10) - (gCtx.measureText(line.txt).width / 2), line.cell.y - line.size, gCtx.measureText(line.txt).width + 20, line.size + 10)
 }
 
 function renderCanvas(mem) {
-    let currImg = mem
-    onImgInputFromLiberty(currImg.selectedImgId)
-    currImg.lines.forEach(line => {
+    clearCanvas(false)
+    let currImg = mem.selectedImgId
+    if (currImg) onImgInputFromLiberty(currImg)
+    mem.lines.forEach(line => {
         gCtx.fillText(line.txt, line.cell.x, line.cell.y)
-        gMeme.lines.push(line)
     })
-    console.log('currImg', currImg)
-    console.log('gMeme', gMeme)
 }
 
-function clearCanvas() {
+function clearCanvas(isReset = true) {
     let currColor = gCtx.fillStyle
     gCtx.fillStyle = '#aa91b4'
     gCtx.fillRect(0, 0, gElCanvas.width, gElCanvas.height)
     gCtx.fillStyle = currColor
-    reset()
+    if (isReset) reset()
 }
 
 function reset() {
-    gTextLines = 0
-    isFirstLineEmpty = true
-    isSecondLineEmpty = true
     gMeme = {
         selectedImgId: null,
         selectedLineIdx: null,
@@ -221,9 +197,9 @@ function setColor(color) {
 }
 
 function setSize(value) {
-    if (value === '+') gCtx.lineWidth += 2
-    else gCtx.lineWidth -= 2
-    document.querySelector('.size-number').innerText = gCtx.lineWidth
+    if (value === '+') gSize += 2
+    else gSize -= 2
+    document.querySelector('.size-number').innerText = gSize
 }
 
 function setFont(value) {
@@ -231,7 +207,16 @@ function setFont(value) {
 }
 
 function save(elLink) {
+    renderCanvas(gMeme)
     const data = gElCanvas.toDataURL()
     elLink.href = data
     elLink.download = 'my-img.jpg'
+}
+
+function onSaveImg() {
+    renderCanvas(gMeme)
+    const data = gElCanvas.toDataURL()
+    let currMemes = JSON.parse(JSON.stringify(gMeme))
+    currMemes.url = data
+    saveImage(currMemes)
 }

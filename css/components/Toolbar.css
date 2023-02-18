@@ -18,9 +18,8 @@
     top: 0.2em;
 }
 
-.download a {
+.download {
     color: black;
-    text-decoration: none;
 }
 
 .size {

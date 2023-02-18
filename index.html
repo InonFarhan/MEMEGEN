@@ -48,9 +48,10 @@
             <button class="delete fa-solid fa-trash-can" onclick="clearCanvas()"></button>
             <button class="fa-solid fa-arrow-up-a-z" onclick="moveText('-100')"></button>
             <button class="fa-solid fa-arrow-down-a-z" onclick="moveText('+100')"></button>
+            <button class="fa-solid fa-arrows-up-down" onclick="changeLine()"></button>
         </div>
         <div class="last flex">
-            <button class="download fa-solid fa-download"><a href="#" onclick="save(this)" download=""></a></button>
+            <button><a class="download fa-solid fa-download" href="#" onclick="save(this)" download=""></a></button>
             <button class="fa-solid fa-floppy-disk save"><a href="#" onclick="onSaveImg()"></a></button>
             <button class="share fa-solid fa-share-nodes" onclick="onSaveImg()"></button>
             <button class="fa-solid fa-file-arrow-up" onclick="chooseImg('upload')"></button>

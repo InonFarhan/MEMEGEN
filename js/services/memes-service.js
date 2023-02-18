@@ -24,7 +24,7 @@ let gImgs = [
 ]
 let gMeme = {
     selectedImgId: null,
-    selectedLineIdx: null,
+    selectedLineIdx: 0,
     lines: []
 }
 

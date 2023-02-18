@@ -1,3 +1,13 @@
+@media (min-width:250px) {
+    .canvas-container {
+        width: 100%;
+    }
+
+    .images {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (min-width:270px) {
     .main-container {
         display: grid;
@@ -12,7 +22,6 @@
     .canvas-container {
         grid-column: 2;
         margin-block-end: 2em;
-        width: 100%;
     }
 
     .Toolbar {
@@ -44,13 +53,12 @@
     }
 }
 
-@media (min-width:250px) {
-    .images {
-        grid-template-columns: repeat(2, 1fr);
+@media (min-width:400px) {
+    .canvas-container {
+        height: 330px;
+        width: 330px;
     }
-}
 
-@media (min-width:430px) {
     .images {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -89,35 +97,10 @@
     .canvas-container {
         grid-column: 3;
         margin-block-end: 1em;
-        height: 550px;
-        width: 550px;
     }
 
     .Toolbar {
         grid-column: 3;
-    }
-
-    .Toolbar>* {
-        /* gap: 5px; */
-    }
-
-    .Toolbar .first {
-        /* grid-column: 2; */
-        /* grid-row: 1; */
-    }
-
-    .Toolbar .sec {
-        /* grid-column: 3; */
-
-        /* grid-row: 2; */
-    }
-
-    .Toolbar .last {
-        /* grid-row: 3; */
-    }
-
-    .main-footer {
-        /* grid-column: span 4; */
     }
 
     .images {
@@ -128,8 +111,8 @@
 
 @media (min-width:750px) {
     .canvas-container {
-        height: 600px;
-        width: 600px;
+        height: 400px;
+        width: 400px;
     }
 
     .Toolbar {
