@@ -5,7 +5,7 @@ let gCtx
 let gFont = 'Ariel'
 let gIsItalic = false
 let gSize = 22
-let gStepValue
+let gChangeLineStep
 
 
 function init() {
@@ -120,10 +120,10 @@ function moveText(value) {
 }
 
 function changeLine(isChange = true) {
-    if (gMeme.selectedLineIdx === 1) gStepValue = '+1'
-    if (gMeme.selectedLineIdx === gMeme.lines.length) gStepValue = '-1'
-    if (!isChange) gStepValue = '0'
-    gMeme.selectedLineIdx += +gStepValue
+    if (gMeme.selectedLineIdx === 1) gChangeLineStep = '+1'
+    if (gMeme.selectedLineIdx === gMeme.lines.length) gChangeLineStep = '-1'
+    if (!isChange) gChangeLineStep = '0'
+    gMeme.selectedLineIdx += +gChangeLineStep
     renderCanvas(gMeme)
     drawFrame(gMeme.lines[gMeme.selectedLineIdx - 1])
 }
